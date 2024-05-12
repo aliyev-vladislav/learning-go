@@ -1,30 +1,26 @@
 package main
 
-import (
-	"fmt"
-	"log"
-	"os"
+import "fmt"
 
-	"github.com/learning-go-book-2e/formatter"
-	"github.com/shopspring/decimal"
-)
+type account struct {
+	value int
+}
 
 func main() {
-	if len(os.Args) < 3 {
-		fmt.Println("Need two parametrs: amount and percent")
-		os.Exit(1)
-	}
-	amount, err := decimal.NewFromString(os.Args[1])
-	if err != nil {
-		log.Fatal(err)
-	}
-	percent, err := decimal.NewFromString(os.Args[2])
-	if err != nil {
-		log.Fatal(err)
-	}
-	percent = percent.Div(decimal.NewFromInt(100))
-	total := amount.Add(amount.Mul(percent)).Round(2)
-	fmt.Println(formatter.Space(80, os.Args[1], os.Args[2],
-		total.StringFixed(2)))
+	s1 := make([]account, 2, 3)
+	s2 := append(s1, account{})
+	s3 := append(s2, account{})
+
+	acc := &s2[0]
+	acc2 := &s3[0]
+
+	acc.value = 100
+	acc2.value = 200
+
+	fmt.Println(s1, s2, s3)
+
+	acc.value = 123
+
+	fmt.Println(s1, s2, s3)
 
 }
