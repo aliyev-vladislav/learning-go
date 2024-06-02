@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/aliyev-vladislav/learning-go/core/context_user/identity"
+
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 )
@@ -78,5 +79,5 @@ func main() {
 		r.Get("/", controller.DoLogic)
 		r.Get("/logout", controller.Logout)
 	})
-	http.ListenAndServe(":3000", r)
+	http.ListenAndServe(":8080", r)
 }

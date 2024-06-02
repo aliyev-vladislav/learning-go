@@ -16,12 +16,12 @@ func ContextWithUser(ctx context.Context, user string) context.Context {
 	return context.WithValue(ctx, key, user)
 }
 
-func userFromContext(ctx context.Context) (string, bool) {
+func UserFromContext(ctx context.Context) (string, bool) {
 	user, ok := ctx.Value(key).(string)
 	return user, ok
 }
 
-func extractUser(req *http.Request) (string, error) {
+func ExtractUser(req *http.Request) (string, error) {
 	userCookie, err := req.Cookie("identity")
 	if err != nil {
 		return "", err
@@ -31,7 +31,7 @@ func extractUser(req *http.Request) (string, error) {
 
 func Middleware(h http.Handler) http.Handler {
 	return http.HandlerFunc(func(rw http.ResponseWriter, req *http.Request) {
-		user, err := extractUser(req)
+		user, err := ExtractUser(req)
 		if err != nil {
 			rw.WriteHeader(http.StatusUnauthorized)
 			rw.Write([]byte("unauthorized"))
@@ -51,7 +51,7 @@ func SetUser(user string, rw http.ResponseWriter) {
 	})
 }
 
-func DeleteCookie(rw http.ResponseWriter) {
+func DeleteUser(rw http.ResponseWriter) {
 	http.SetCookie(rw, &http.Cookie{
 		Name:   "identity",
 		Value:  "",
