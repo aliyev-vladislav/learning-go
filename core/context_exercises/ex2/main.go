@@ -66,4 +66,5 @@ func main() {
 		Addr:    ":8080",
 	}
 	server.ListenAndServe()
+	http.Handle("/", http.HandlerFunc(message))
 }
