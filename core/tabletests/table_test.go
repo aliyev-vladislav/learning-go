@@ -59,6 +59,7 @@ func TestDoMathTable(t *testing.T) {
 		{"multiplication", 2, 2, "*", 4, ""},
 		{"division", 2, 2, "/", 1, ""},
 		{"bad_divison", 2, 0, "/", 0, `division by zero`},
+		{"bad_op", 2, 2, "?", 0, `unknown operator ?`},
 	}
 
 	for _, d := range data {
