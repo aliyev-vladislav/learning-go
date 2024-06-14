@@ -1,4 +1,4 @@
-package stub
+package stubs
 
 type User struct{}
 type Pet struct {
@@ -23,10 +23,9 @@ func (l Logic) GetPetNames(userId string) ([]string, error) {
 	if err != nil {
 		return nil, err
 	}
-	out := make([]string, len(pets))
+	out := make([]string, 0)
 	for _, p := range pets {
 		out = append(out, p.Name)
 	}
 	return out, nil
-
 }
