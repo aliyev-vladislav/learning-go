@@ -76,6 +76,9 @@ func (es EntitiesStub) SaveUser(user User) error {
 }
 
 func TestLogicGetPetNames2(t *testing.T) {
+	if testing.Short() {
+		t.Skip("skipping test in short mode.")
+	}
 	data := []struct {
 		name     string
 		getPets  func(userID string) ([]Pet, error)
