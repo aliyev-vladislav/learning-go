@@ -59,6 +59,24 @@ func TestParse_ErrorsOnInvalidInput(t *testing.T) {
 
 }
 
+func FuzzParse(f *testing.F) {
+	testcases := [][]byte{
+		[]byte("CALC_1\n+\n2\n2"),
+		[]byte("CALC_2\n-\n2\n2"),
+		[]byte("CALC_2\n*\n2\n2"),
+		[]byte("CALC_2\n/\n2\n2"),
+	}
+	for _, tc := range testcases {
+		f.Add(tc)
+	}
+	f.Fuzz(func(t *testing.T, in []byte) {
+		out, err := parser(in)
+		if err != nil && cmp.Diff(out, Input{}) != "" {
+			t.Fatal(err)
+		}
+	})
+}
+
 func TestDataProcessor(t *testing.T) {
 	testdata := []struct {
 		name        string
@@ -178,16 +196,14 @@ func TestNewController(t *testing.T) {
 		out := make(chan []byte, 1)
 		req := httptest.NewRequest(http.MethodPost, "/", bytes.NewReader([]byte("...")))
 		res := httptest.NewRecorder()
-		req2 := httptest.NewRequest(http.MethodPost, "/", bytes.NewReader([]byte("...")))
-		res2 := httptest.NewRecorder()
 		handler := NewController(out)
+		out <- []byte("something data")
 		handler.ServeHTTP(res, req)
-		handler.ServeHTTP(res2, req2)
 
-		if res2.Code != http.StatusServiceUnavailable {
+		if res.Code != http.StatusServiceUnavailable {
 			t.Errorf("Expected %d, but got %d", http.StatusServiceUnavailable, res.Code)
 		}
-		if res2.Body.String() != expected {
+		if res.Body.String() != expected {
 			t.Errorf("Expected body of %s, but got %s", expected, res.Body.String())
 		}
 
